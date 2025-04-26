@@ -1,0 +1,1 @@
+# Python_Tkinter_Chatboot_Primeiros_socorros
