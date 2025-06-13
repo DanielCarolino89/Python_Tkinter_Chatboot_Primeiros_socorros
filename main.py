@@ -12,7 +12,7 @@ nlp = spacy.load('pt_core_news_sm')
 nltk.download('punkt')
 
 # Frases de saudação
-palavras_chave_saudacao = ['oi', 'olá', 'e aí', 'bom dia', 'boa tarde', 'boa noite', 'ajuda', 'socorro', 'primeiros socorros', 'emergência', 'urgência']
+palavras_chave_saudacao = ['oi','ola', 'olá','e ai','e aí','dia','tarde','noite','bom', 'bom dia', 'boa tarde', 'boa noite', 'ajuda', 'socorro', 'primeiros socorros', 'emergência', 'urgência']
 respostas_saudacao = [
     'Oi! Como posso te ajudar com primeiros socorros?',
     'Olá! Me pergunte algo sobre primeiros socorros.',
@@ -88,6 +88,7 @@ rotulo_pergunta = tk.Label(raiz, text="Digite sua pergunta:", font=("Arial", 12)
 rotulo_pergunta.pack(anchor='w', padx=10)
 entrada_usuario = tk.Entry(raiz, width=50, font=("Arial", 12))
 entrada_usuario.pack(side=tk.LEFT, padx=(10, 0), pady=(0, 10), expand=True, fill=tk.X)
+entrada_usuario.bind("<Return>", lambda event: enviar_mensagem())
 
 # Botão de envio
 botao_enviar = tk.Button(raiz, text="Enviar", command=enviar_mensagem, font=("Arial", 11))
