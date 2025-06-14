@@ -7,6 +7,7 @@ from tkinter import scrolledtext
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from base import base_conhecimento
+from datetime import datetime
 
 # Hugging Face e reconhecimento de voz
 from transformers import pipeline
@@ -28,17 +29,27 @@ ultima_pergunta_usuario = ""
 # Palavras e frases para detectar saudações
 palavras_chave_saudacao = ['oi','ola', 'olá','e ai','e aí','dia','tarde','noite','bom', 'bom dia', 'boa tarde', 'boa noite', 'ajuda', 'socorro', 'primeiros socorros', 'emergência', 'urgência']
 respostas_saudacao = [
-    'Oi! Como posso te ajudar com primeiros socorros?',
-    'Olá! Me pergunte algo sobre primeiros socorros.',
-    'Estou aqui para ajudar. O que você quer saber sobre primeiros socorros?'
+    'como posso te ajudar com primeiros socorros?',
+    'me pergunte algo sobre primeiros socorros.',
+    'estou aqui para ajudar. O que você quer saber sobre primeiros socorros?'
 ]
+
+def saudacao_hora():
+    hora = datetime.now().hour
+
+    if 5 <= hora < 12:
+        return "Bom dia, "
+    elif 12 <= hora < 18:
+        return "Boa tarde, "
+    else:
+        return "Boa noite, "
 
 # Verifica se a entrada do usuário contém uma saudação
 def verificar_saudacao(texto):
     texto = texto.lower()
     for palavra in palavras_chave_saudacao:
         if palavra in texto:
-            return random.choice(respostas_saudacao)
+            return saudacao_hora()+random.choice(respostas_saudacao)
     return None
 
 # Remove stopwords, pontuações e números da frase para processamento
@@ -69,9 +80,24 @@ def gerar_resposta(pergunta, limite=0.2):
 
 # Usa modelo Hugging Face para analisar o sentimento de uma frase
 def analisar_sentimento(texto):
+    
     resultado = sentimento_pipeline(texto)[0]
-    return f"Sentimento detectado: {resultado['label']} (confiança: {resultado['score']:.2f})"
 
+    # Classificação do sentimento
+    if resultado['label'] in ['1 star', '2 stars']:
+        sentimento = 'Negativo'
+    elif resultado['label'] == '3 stars':
+        sentimento = 'Neutro'
+    elif resultado['label'] in ['4 stars', '5 stars']:
+        sentimento = 'Positivo'
+    else:
+        sentimento = 'Desconhecido'
+
+    return (
+        f"Sentimento detectado: {resultado['label']} "
+        f"(confiança: {resultado['score']:.2f}) - {sentimento}\n"
+    )
+    
 # Inicia ou para a escuta de áudio
 def iniciar_escuta():
     global gravando_audio, modo_continuo
@@ -85,7 +111,7 @@ def iniciar_escuta():
     botao_voz.config(text="🛑 Parar Escuta", bg="red", fg="white")
     janela_conversa.config(state=tk.NORMAL)
     janela_conversa.tag_config("negrito", font=("Arial", 12, "bold"))
-    janela_conversa.insert(tk.END, "\nDoutorBot: \n","negrito")
+    janela_conversa.insert(tk.END, "\nDoutorBot: ","negrito")
     janela_conversa.insert(tk.END, "Modo escuta iniciado...\n")
     janela_conversa.config(state=tk.DISABLED)
     janela_conversa.yview(tk.END)
@@ -100,13 +126,13 @@ def executar_escuta_continua():
         recognizer.adjust_for_ambient_noise(source, duration=0.3)
         while gravando_audio:
             try:
-                audio = recognizer.listen(source, timeout=5, phrase_time_limit=6)
+                audio = recognizer.listen(source, timeout=15, phrase_time_limit=16)
                 texto = recognizer.recognize_google(audio, language="pt-BR")
                 entrada_usuario.delete(0, tk.END)
                 entrada_usuario.insert(0, texto)
                 janela_conversa.config(state=tk.NORMAL)
                 janela_conversa.tag_config("negrito", font=("Arial", 12, "bold"))
-                janela_conversa.insert(tk.END, f"\nDoutorBot: \n", "negrito")
+                janela_conversa.insert(tk.END, f"\nDoutorBot: ", "negrito")
                 janela_conversa.insert(tk.END, f"verificando...\n")
                 janela_conversa.config(state=tk.DISABLED)
                 janela_conversa.yview(tk.END)
@@ -128,11 +154,13 @@ def atualizar_indicador(texto):
     janela_conversa.insert(tk.END, texto + "\n")
     janela_conversa.config(state=tk.DISABLED)
     janela_conversa.yview(tk.END)
+    
 
 # Exibe resultado de análise de sentimento da última pergunta
 def usar_analise_sentimento():
     if ultima_pergunta_usuario.strip():
         resultado = analisar_sentimento(ultima_pergunta_usuario)
+        
         janela_conversa.config(state=tk.NORMAL)
         janela_conversa.tag_config("verde", font=("Arial", 12, "bold"), foreground="green")
         janela_conversa.insert(tk.END, "\nDoutorBot: \n", "negrito")
