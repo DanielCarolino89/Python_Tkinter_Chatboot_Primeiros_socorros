@@ -1,27 +1,40 @@
-# 🩺 DoutorBot - Chatbot de Primeiros Socorros com Voz e Análise de Sentimento
+# 🩺 DoutorBot - Chatbot de Primeiros Socorros com Voz e Análise de Sentimento.
 
-**DoutorBot** é um chatbot interativo desenvolvido em **Python** com **Tkinter**, capaz de responder perguntas sobre primeiros socorros. Ele utiliza **reconhecimento de voz** para receber comandos e **análise de sentimento** para entender o tom emocional do usuário, oferecendo uma experiência mais empática e inteligente.
+**DoutorBot** é um assistente virtual interativo de **primeiros socorros** com interface gráfica em Python (Tkinter). Ele responde perguntas via texto ou voz, interpreta o **sentimento do usuário** com IA, e oferece orientações básicas baseadas em uma base de conhecimento personalizada.
 
 ---
 
 ## 🚀 Funcionalidades
 
-- 🎙️ Entrada de voz via microfone (SpeechRecognition)
-- 💬 Chat em tempo real com interface gráfica (Tkinter)
-- 🧠 Análise de sentimento usando modelo HuggingFace
-- 🆘 Respostas automáticas sobre primeiros socorros
-- 🌍 Suporte multilíngue para análise de sentimento
+- 🎤 Reconhecimento de voz em tempo real
+- 💬 Chat via interface gráfica com Tkinter
+- 🧠 Análise de sentimento usando modelo BERT multilingue (Hugging Face)
+- 🧾 Respostas automáticas com base em similaridade textual (TF-IDF + NLP)
+- 📚 Saudações e mensagens inteligentes baseadas no horário
+- 🔄 Processamento em tempo real com threading para escuta contínua
+
+---
+
+## 🖼️ Interface
+
+A interface consiste em:
+- Um histórico de conversa
+- Entrada de texto para perguntas
+- Botões para enviar, ativar escuta por voz e analisar sentimento
+- Rodapé com créditos
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
 - `Python 3.x`
-- `Tkinter` — Interface gráfica do chat
-- `SpeechRecognition` — Reconhecimento de voz
-- `transformers` — Análise de sentimento com modelos BERT
-- `PyAudio` — Captura de áudio
-- `threading` — Execução paralela (voz e interface)
-- `HuggingFace Transformers` — Pipeline de NLP
+- `Tkinter` — interface gráfica
+- `SpeechRecognition` e `PyAudio` — captura e transcrição de áudio
+- `transformers` — modelo de sentimento pré-treinado (`nlptown/bert-base-multilingual-uncased-sentiment`)
+- `spaCy` — processamento de linguagem natural (`pt_core_news_sm`)
+- `nltk` — tokenização
+- `scikit-learn` — TF-IDF e similaridade textual
 
 ---
+
+
