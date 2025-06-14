@@ -1,5 +1,3 @@
-# Python_Tkinter_Chatboot_Primeiros_socorros
-
 # 🩺 DoutorBot - Chatbot de Primeiros Socorros com Voz e Análise de Sentimento
 
 **DoutorBot** é um chatbot interativo desenvolvido em **Python** com **Tkinter**, capaz de responder perguntas sobre primeiros socorros. Ele utiliza **reconhecimento de voz** para receber comandos e **análise de sentimento** para entender o tom emocional do usuário, oferecendo uma experiência mais empática e inteligente.
